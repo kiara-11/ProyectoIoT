@@ -57,9 +57,10 @@
             this.label1.ForeColor = System.Drawing.Color.DarkGreen;
             this.label1.Location = new System.Drawing.Point(24, 140);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(239, 44);
+            this.label1.Size = new System.Drawing.Size(263, 44);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Iniciar Sesión";
+            this.label1.Text = "CambioPrueba";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
