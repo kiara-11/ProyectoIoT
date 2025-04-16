@@ -54,13 +54,12 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label1.Font = new System.Drawing.Font("Microsoft YaHei UI", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.DarkGreen;
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(28)))), ((int)(((byte)(62)))));
             this.label1.Location = new System.Drawing.Point(24, 140);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(263, 44);
+            this.label1.Size = new System.Drawing.Size(279, 44);
             this.label1.TabIndex = 1;
-            this.label1.Text = "CambioPrueba";
-       
+            this.label1.Text = "Inicio de Sesión";
             // 
             // label2
             // 
@@ -102,7 +101,7 @@
             // 
             this.boton_acceder.Location = new System.Drawing.Point(32, 481);
             this.boton_acceder.Name = "boton_acceder";
-            this.boton_acceder.Size = new System.Drawing.Size(352, 35);
+            this.boton_acceder.Size = new System.Drawing.Size(334, 35);
             this.boton_acceder.TabIndex = 6;
             this.boton_acceder.Text = "Acceder";
             this.boton_acceder.UseVisualStyleBackColor = true;

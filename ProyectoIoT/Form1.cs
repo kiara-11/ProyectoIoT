@@ -41,7 +41,7 @@ namespace ProyectoIoT
 
             try
             {
-                MySqlCommand comando = new MySqlCommand("SELECT * FROM usuario WHERE usu = @usuario AND password = @contra", conexionBD);
+                MySqlCommand comando = new MySqlCommand("SELECT * FROM usuarios WHERE usuario = @usuario AND password = @contra", conexionBD);
                 comando.Parameters.AddWithValue("@usuario", usuario);
                 comando.Parameters.AddWithValue("@contra", contra);
 
