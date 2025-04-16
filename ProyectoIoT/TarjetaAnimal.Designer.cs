@@ -1,16 +1,16 @@
 ﻿namespace ProyectoIoT
 {
-    partial class Dieta
+    partial class TarjetaAnimal
     {
-        /// <summary>
-        /// Required designer variable.
+        /// <summary> 
+        /// Variable del diseñador necesaria.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
+        /// <summary> 
+        /// Limpiar los recursos que se estén usando.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">true si los recursos administrados se deben desechar; false en caso contrario.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,15 +20,15 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region Código generado por el Diseñador de componentes
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// <summary> 
+        /// Método necesario para admitir el Diseñador. No se puede modificar
+        /// el contenido de este método con el editor de código.
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dieta));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TarjetaAnimal));
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
@@ -46,11 +46,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.flowLayoutPanelTarjetas = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            this.flowLayoutPanelTarjetas.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -66,11 +64,10 @@
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.pictureBox2);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Location = new System.Drawing.Point(19, 20);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1056, 430);
-            this.panel1.TabIndex = 5;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            this.panel1.TabIndex = 6;
             // 
             // button1
             // 
@@ -81,7 +78,6 @@
             this.button1.TabIndex = 13;
             this.button1.Text = "Editar";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label13
             // 
@@ -281,55 +277,40 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Nombre:";
             // 
-            // flowLayoutPanelTarjetas
-            // 
-            this.flowLayoutPanelTarjetas.AutoScroll = true;
-            this.flowLayoutPanelTarjetas.Controls.Add(this.panel1);
-            this.flowLayoutPanelTarjetas.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanelTarjetas.Name = "flowLayoutPanelTarjetas";
-            this.flowLayoutPanelTarjetas.Size = new System.Drawing.Size(1081, 575);
-            this.flowLayoutPanelTarjetas.TabIndex = 6;
-            this.flowLayoutPanelTarjetas.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanelTarjetas_Paint);
-            // 
-            // Dieta
+            // TarjetaAnimal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1080, 576);
-            this.Controls.Add(this.flowLayoutPanelTarjetas);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "Dieta";
-            this.Text = "Dieta";
+            this.Controls.Add(this.panel1);
+            this.Name = "TarjetaAnimal";
+            this.Size = new System.Drawing.Size(1098, 474);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            this.flowLayoutPanelTarjetas.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Label label1;
+
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label lblID;
         private System.Windows.Forms.Label lblNombre;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label lblAgua;
+        private System.Windows.Forms.Label lblComida3;
+        private System.Windows.Forms.Label lblComida2;
         private System.Windows.Forms.Label lblComida1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label lblID;
-        private System.Windows.Forms.Label lblAgua;
-        private System.Windows.Forms.Label lblComida3;
-        private System.Windows.Forms.Label lblComida2;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelTarjetas;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Label label1;
     }
 }
