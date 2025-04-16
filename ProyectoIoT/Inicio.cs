@@ -139,5 +139,19 @@ namespace ProyectoIoT
         {
             
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void iconButton1_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender, RGBColors.color1);
+            OpenChildForm(new Informacion());
+
+        }
+
+       
     }
 }

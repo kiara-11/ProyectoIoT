@@ -8,7 +8,7 @@ namespace ProyectoIoT
     {
         public static MySqlConnection conex()
         {
-            string servidor = "server=localhost; database=registro11; Uid=root; pwd=;";
+            string servidor = "server=localhost; database=iotbdd; Uid=root; pwd=;";
             MySqlConnection conexionBD = new MySqlConnection(servidor);
 
             try
