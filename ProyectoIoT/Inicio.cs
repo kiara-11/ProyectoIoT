@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FontAwesome.Sharp;
+using UIDC;
+using MySql.Data.MySqlClient;
 
 namespace ProyectoIoT
 {
@@ -17,21 +20,22 @@ namespace ProyectoIoT
         private Panel leftBorderBtn;
         private Form currentChildForm;
         private IconPictureBox iconCurrentChildForm;
+        private SerialPort serialPort;
+        private string tarjetaId;
+        private float valorAgua;
+        private float valorComida;
 
         public Inicio()
         {
             InitializeComponent();
 
-           
             panelMenu.Dock = DockStyle.Left;
             panelMenu.Width = 200;
             panelMenu.BackColor = Color.MidnightBlue;
 
-           
             panelDesktop.Dock = DockStyle.Fill;
             panelDesktop.BackColor = Color.WhiteSmoke;
 
-          
             iconCurrentChildForm = new IconPictureBox();
             iconCurrentChildForm.IconChar = IconChar.Home;
             iconCurrentChildForm.IconColor = Color.Gainsboro;
@@ -39,19 +43,18 @@ namespace ProyectoIoT
             iconCurrentChildForm.Location = new Point(10, 10);
             panelDesktop.Controls.Add(iconCurrentChildForm);
 
-          
             leftBorderBtn = new Panel();
             leftBorderBtn.Size = new Size(7, 60);
             panelMenu.Controls.Add(leftBorderBtn);
+
+            monthCalendar1.DateChanged += MonthCalendar1_DateChanged;
         }
 
-      
         private struct RGBColors
         {
-            public static Color color1 = ColorTranslator.FromHtml("#FFC20E"); 
+            public static Color color1 = ColorTranslator.FromHtml("#FFC20E");
         }
 
-       
         private void ActivateButton(object senderBtn, Color color)
         {
             if (senderBtn != null)
@@ -75,7 +78,6 @@ namespace ProyectoIoT
             }
         }
 
-      
         private void DisableButton()
         {
             if (currentBtn != null)
@@ -89,7 +91,6 @@ namespace ProyectoIoT
             }
         }
 
-       
         private void OpenChildForm(Form childForm)
         {
             if (currentChildForm != null)
@@ -105,8 +106,6 @@ namespace ProyectoIoT
             childForm.BringToFront();
             childForm.Show();
         }
-
-       
 
         private void bt_dashboard_Click_1(object sender, EventArgs e)
         {
@@ -137,11 +136,6 @@ namespace ProyectoIoT
 
         private void panelMenu_Paint(object sender, PaintEventArgs e)
         {
-            
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
 
         }
 
@@ -149,9 +143,46 @@ namespace ProyectoIoT
         {
             ActivateButton(sender, RGBColors.color1);
             OpenChildForm(new Informacion());
-
         }
 
-       
+        private void iconButton2_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender, RGBColors.color1);
+            OpenChildForm(new Alertas());
+        }
+
+        private void MonthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            string fechaSeleccionada = e.Start.ToString("dd/MM/yyyy");
+            string query = "SELECT cantidad FROM alimentacion WHERE fecha = @fecha";
+
+            try
+            {
+                using (MySqlConnection conn = conectar.conex())
+                {
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@fecha", fechaSeleccionada);
+
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+
+                            chart1.Series[0].Points.Clear();
+                            int i = 1;
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                chart1.Series[0].Points.AddXY(i++, row["cantidad"]);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al consultar la base de datos: " + ex.Message);
+            }
+        }
     }
 }
