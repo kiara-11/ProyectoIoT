@@ -78,6 +78,7 @@
             this.button1.TabIndex = 13;
             this.button1.Text = "Editar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label13
             // 
@@ -284,6 +285,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "TarjetaAnimal";
             this.Size = new System.Drawing.Size(1098, 474);
+            this.Load += new System.EventHandler(this.TarjetaAnimal_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
