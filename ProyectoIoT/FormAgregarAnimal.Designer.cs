@@ -44,6 +44,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.txtRFID = new System.Windows.Forms.TextBox();
+            this.btnCancelar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtEdad
@@ -86,9 +87,9 @@
             // 
             this.btnGuardar.BackColor = System.Drawing.Color.Olive;
             this.btnGuardar.Font = new System.Drawing.Font("Swis721 BlkCn BT", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGuardar.Location = new System.Drawing.Point(445, 285);
+            this.btnGuardar.Location = new System.Drawing.Point(316, 285);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(144, 30);
+            this.btnGuardar.Size = new System.Drawing.Size(127, 40);
             this.btnGuardar.TabIndex = 22;
             this.btnGuardar.Text = "Agregar   +";
             this.btnGuardar.UseVisualStyleBackColor = false;
@@ -201,12 +202,25 @@
             this.txtRFID.TabIndex = 29;
             this.txtRFID.TextChanged += new System.EventHandler(this.txtRFID_TextChanged);
             // 
+            // btnCancelar
+            // 
+            this.btnCancelar.BackColor = System.Drawing.Color.Olive;
+            this.btnCancelar.Font = new System.Drawing.Font("Swis721 BlkCn BT", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancelar.Location = new System.Drawing.Point(469, 285);
+            this.btnCancelar.Name = "btnCancelar";
+            this.btnCancelar.Size = new System.Drawing.Size(127, 40);
+            this.btnCancelar.TabIndex = 30;
+            this.btnCancelar.Text = "Cancelar";
+            this.btnCancelar.UseVisualStyleBackColor = false;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            // 
             // FormAgregarAnimal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ProyectoIoT.Properties.Resources.ChatGPT_Image_19_abr_2025__07_35_02_p_m_;
             this.ClientSize = new System.Drawing.Size(648, 469);
+            this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.txtRFID);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.txtEdad);
@@ -249,5 +263,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtRFID;
+        private System.Windows.Forms.Button btnCancelar;
     }
 }

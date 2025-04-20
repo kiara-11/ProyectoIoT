@@ -29,6 +29,7 @@ namespace ProyectoIoT
                 DataTable tabla = new DataTable();
                 adaptador.Fill(tabla);
                 dgvAnimales.DataSource = tabla;
+                EstilizarDataGridView();
             }
             // Verificar que existan columnas antes de configurarlas
             if (dgvAnimales.Columns.Count > 0)
@@ -66,7 +67,34 @@ namespace ProyectoIoT
         {
 
         }
+        private void EstilizarDataGridView()
+        {
+            dgvAnimales.EnableHeadersVisualStyles = false;
+            dgvAnimales.BackgroundColor = Color.White;
+            dgvAnimales.BorderStyle = BorderStyle.None;
+            dgvAnimales.GridColor = Color.LightGray;
+            dgvAnimales.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
 
+            // Encabezado
+            dgvAnimales.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul profesional
+            dgvAnimales.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvAnimales.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            dgvAnimales.ColumnHeadersHeight = 35;
+
+            // Celdas normales
+            dgvAnimales.DefaultCellStyle.BackColor = Color.White;
+            dgvAnimales.DefaultCellStyle.ForeColor = Color.Black;
+            dgvAnimales.DefaultCellStyle.SelectionBackColor = Color.LightSkyBlue;
+            dgvAnimales.DefaultCellStyle.SelectionForeColor = Color.Black;
+            dgvAnimales.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+
+            // Filas alternas (zebra)
+            dgvAnimales.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
+
+            // Otras configuraciones
+            dgvAnimales.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvAnimales.RowTemplate.Height = 30;
+        }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if(e.RowIndex >= 0 && dgvAnimales.Columns[e.ColumnIndex].Name == "Editar")
