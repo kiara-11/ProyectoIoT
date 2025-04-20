@@ -605,6 +605,16 @@ namespace ProyectoIoT
             refrescoAlertas.Start();
         }
 
-        
+        private void Inicio_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Aquí va la lógica al hacer clic en una celda
+        }
+
+
     }
 }

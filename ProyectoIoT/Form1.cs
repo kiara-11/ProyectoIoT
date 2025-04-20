@@ -119,5 +119,11 @@ namespace ProyectoIoT
         {
 
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Aquí podés inicializar valores, cargar datos, etc.
+        }
+
     }
 }
