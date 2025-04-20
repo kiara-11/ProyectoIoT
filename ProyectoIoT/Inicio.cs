@@ -24,6 +24,9 @@ namespace ProyectoIoT
         private string tarjetaId;
         private float valorAgua;
         private float valorComida;
+        private Timer refrescoFichaRapida;
+        private Timer refrescoAlertas;
+        private Timer refrescoContadorAnimales;
 
         public Inicio()
         {
@@ -34,7 +37,6 @@ namespace ProyectoIoT
             panelMenu.BackColor = Color.MidnightBlue;
 
             panelDesktop.Dock = DockStyle.Fill;
-            panelDesktop.BackColor = Color.WhiteSmoke;
 
             iconCurrentChildForm = new IconPictureBox();
             iconCurrentChildForm.IconChar = IconChar.Home;
@@ -43,17 +45,61 @@ namespace ProyectoIoT
             iconCurrentChildForm.Location = new Point(10, 10);
             panelDesktop.Controls.Add(iconCurrentChildForm);
 
+            this.MaximumSize = this.Size;
+            this.MinimumSize = this.Size;
+
             leftBorderBtn = new Panel();
             leftBorderBtn.Size = new Size(7, 60);
             panelMenu.Controls.Add(leftBorderBtn);
 
             monthCalendar1.DateChanged += MonthCalendar1_DateChanged;
+            this.Load += (s, e) => {
+                CargarFichaRapida();
+                IniciarTemporizadorFichaRapida();
+                CargarResumenAlertas();
+                IniciarTemporizadorAlertas();
+                CargarCantidadAnimales();
+                IniciarTemporizadorCantidadAnimales();
+            };
         }
 
         private struct RGBColors
         {
-            public static Color color1 = ColorTranslator.FromHtml("#FFC20E");
+            public static Color color1 = Color.FromArgb(192, 18, 28, 62);
         }
+
+        private void CargarCantidadAnimales()
+        {
+            string query = "SELECT COUNT(*) FROM animales";
+
+            try
+            {
+                using (MySqlConnection conn = conectar.conex())
+                {
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
+                        label8.Text = $"Total: {cantidad}";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al contar animales: " + ex.Message);
+            }
+        }
+
+        private void IniciarTemporizadorCantidadAnimales()
+        {
+            refrescoContadorAnimales = new Timer();
+            refrescoContadorAnimales.Interval = 10000;
+            refrescoContadorAnimales.Tick += (s, e) => CargarCantidadAnimales();
+            refrescoContadorAnimales.Start();
+        }
+
 
         private void ActivateButton(object senderBtn, Color color)
         {
@@ -61,14 +107,13 @@ namespace ProyectoIoT
             {
                 DisableButton();
                 currentBtn = (IconButton)senderBtn;
-                currentBtn.BackColor = Color.FromArgb(255, 248, 212);
-                currentBtn.ForeColor = color;
-                currentBtn.TextAlign = ContentAlignment.MiddleCenter;
-                currentBtn.IconColor = color;
-                currentBtn.TextImageRelation = TextImageRelation.TextBeforeImage;
-                currentBtn.ImageAlign = ContentAlignment.MiddleRight;
 
-                leftBorderBtn.BackColor = color;
+                currentBtn.ForeColor = Color.FromArgb(255, 194, 14);
+                currentBtn.TextAlign = ContentAlignment.MiddleCenter;
+                currentBtn.IconColor = Color.FromArgb(255, 194, 14);
+                currentBtn.TextImageRelation = TextImageRelation.ImageBeforeText;
+                currentBtn.ImageAlign = ContentAlignment.MiddleCenter;
+
                 leftBorderBtn.Location = new Point(0, currentBtn.Location.Y);
                 leftBorderBtn.Visible = true;
                 leftBorderBtn.BringToFront();
@@ -82,7 +127,6 @@ namespace ProyectoIoT
         {
             if (currentBtn != null)
             {
-                currentBtn.BackColor = Color.FromArgb(31, 30, 68);
                 currentBtn.ForeColor = Color.Gainsboro;
                 currentBtn.TextAlign = ContentAlignment.MiddleLeft;
                 currentBtn.IconColor = Color.Gainsboro;
@@ -134,23 +178,36 @@ namespace ProyectoIoT
             OpenChildForm(new Alertas());
         }
 
-        private void panelMenu_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+        private void panelMenu_Paint(object sender, PaintEventArgs e) { }
 
         private void iconButton1_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.color1);
             OpenChildForm(new Informacion());
         }
+        private void bt_historial_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender, RGBColors.color1);
+            OpenChildForm(new Historial());
+        }
 
         private void iconButton2_Click(object sender, EventArgs e)
         {
-            ActivateButton(sender, RGBColors.color1);
-            OpenChildForm(new Alertas());
+            DialogResult result = MessageBox.Show(
+        "¿Estás seguro de activar el dispensador manualmente?",
+        "Confirmación requerida",
+        MessageBoxButtons.YesNo,
+        MessageBoxIcon.Warning
+    );
+
+            if (result == DialogResult.Yes)
+            {
+                Dispensador form = new Dispensador();
+                form.Show(); // Mostrar la ventana flotante solo si confirma
+            }
         }
 
+        //Cantidad por fecha dispensada
         private void MonthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
         {
             string fechaSeleccionada = e.Start.ToString("dd/MM/yyyy");
@@ -159,22 +216,18 @@ namespace ProyectoIoT
             try
             {
                 using (MySqlConnection conn = conectar.conex())
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    cmd.Parameters.AddWithValue("@fecha", fechaSeleccionada);
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                     {
-                        cmd.Parameters.AddWithValue("@fecha", fechaSeleccionada);
-
-                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        chart1.Series[0].Points.Clear();
+                        int i = 1;
+                        foreach (DataRow row in dt.Rows)
                         {
-                            DataTable dt = new DataTable();
-                            adapter.Fill(dt);
-
-                            chart1.Series[0].Points.Clear();
-                            int i = 1;
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                chart1.Series[0].Points.AddXY(i++, row["cantidad"]);
-                            }
+                            chart1.Series[0].Points.AddXY(i++, row["cantidad"]);
                         }
                     }
                 }
@@ -184,5 +237,255 @@ namespace ProyectoIoT
                 MessageBox.Show("Error al consultar la base de datos: " + ex.Message);
             }
         }
+
+        private void iconButton3_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender, RGBColors.color1);
+            OpenChildForm(new Alertas());
+        }
+
+        //Ficha de estado de alimentacion por dia y hora
+        private void CargarFichaRapida()
+        {
+            string fechaHoy = DateTime.Now.ToString("dd/MM/yyyy"); 
+
+            string query = @"
+        SELECT 
+            a.nombre AS Caballo,
+            al.hora AS Hora,
+            CONCAT(al.cantidad, ' kg') AS 'Cantidad dispensada',
+            CASE 
+                WHEN dc.cantidad_permitida IS NULL THEN '❓ Sin dieta asignada'
+                WHEN al.cantidad >= dc.cantidad_permitida THEN '✅ Dieta completada hoy'
+                ELSE '⚠️ Dieta incompleta'
+            END AS Estado
+        FROM alimentacion al
+        JOIN animales a ON al.id_animal = a.id_animal
+        LEFT JOIN dieta_comida dc 
+               ON a.id_dieta = dc.id_dieta AND al.id_comida = dc.id_comida
+        WHERE al.fecha = @fechaHoy
+        ORDER BY al.hora DESC
+        LIMIT 4";
+
+            try
+            {
+                using (MySqlConnection conn = conectar.conex())
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@fechaHoy", fechaHoy);
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        dataGridView2.DataSource = dt;
+                        PersonalizarDataGrid(dataGridView2);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar la ficha rápida: " + ex.Message);
+            }
+        }
+
+        private void PersonalizarDataGrid(DataGridView grid)
+        {
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            grid.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            grid.DefaultCellStyle.BackColor = Color.White;
+            grid.AlternatingRowsDefaultCellStyle.BackColor = Color.LightYellow;
+
+            foreach (DataGridViewColumn col in grid.Columns)
+            {
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            }
+        }
+
+        //para consultar cada 10segundos los datos de la bdd
+        private void IniciarTemporizadorFichaRapida()
+        {
+            refrescoFichaRapida = new Timer();
+            refrescoFichaRapida.Interval = 10000;
+            refrescoFichaRapida.Tick += (s, e) => CargarFichaRapida();
+            refrescoFichaRapida.Start();
+        }
+
+        private void CargarResumenAlertas()
+        {
+            DataTable tablaAlertas = new DataTable();
+            tablaAlertas.Columns.Add("Alerta", typeof(string));
+            tablaAlertas.Columns.Add("Gravedad", typeof(string));
+
+            // 1. Caballos no alimentados desde ayer
+            string alertaNoAlimentado = @"
+            SELECT nombre 
+             FROM animales a 
+             LEFT JOIN alimentacion al ON a.id_animal = al.id_animal
+             GROUP BY a.id_animal
+            HAVING DATEDIFF(CURDATE(), MAX(STR_TO_DATE(al.fecha, '%d/%m/%Y'))) >= 1";
+
+            using (var conn = conectar.conex())
+            {
+                using (var cmd = new MySqlCommand(alertaNoAlimentado, conn))
+                {
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            tablaAlertas.Rows.Add($"⚠️ El caballo {reader.GetString(0)} no ha sido alimentado desde ayer.", "⚠️ Medio");
+                        }
+                    }
+                }
+            }
+
+            // 2. Inventario crítico
+            string alertaInventario = @"
+            SELECT 
+            c.nombre, 
+            i.cantidad_actual, 
+            SUM(dc.cantidad_permitida) AS consumo_diario,
+            ROUND(i.cantidad_actual / SUM(dc.cantidad_permitida), 2) AS dias_restantes
+            FROM inventario i
+            JOIN comidas c ON c.id_comida = i.id_comida
+            JOIN dieta_comida dc ON dc.id_comida = i.id_comida
+           JOIN animales a ON a.id_dieta = dc.id_dieta
+           WHERE STR_TO_DATE(i.fecha_actualizacion, '%d/%m/%Y') = CURDATE()
+           GROUP BY i.id_comida
+           HAVING consumo_diario > 0 AND dias_restantes < 1";
+
+            using (var conn = conectar.conex())
+            {
+                using (var cmd = new MySqlCommand(alertaInventario, conn))
+                {
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string comida = reader.GetString(0);
+                            double dias = reader.GetDouble(3);
+                            string mensaje;
+
+                            if (dias >= 1)
+                                mensaje = $"🔴 Nivel crítico: {comida} alcanza para {Math.Round(dias, 1)} días.";
+                            else if (dias >= 0.25)
+                                mensaje = $"🔴 Atención: {comida} alcanza solo para hoy.";
+                            else if (dias > 0)
+                                mensaje = $"🔴 Alerta: {comida} alcanza solo para unas horas.";
+                            else
+                                mensaje = $"🟥 Sin {comida} disponible en inventario.";
+
+                            tablaAlertas.Rows.Add(mensaje, "🔴 Crítico");
+                        }
+                    }
+                }
+            }
+
+            // 3. Intentos bloqueados
+            string alertaBloqueo = @"
+            SELECT 
+            a.nombre, 
+            ib.motivo, 
+            COUNT(*) AS intentos
+            FROM intentos_bloqueados ib
+            JOIN animales a ON a.id_animal = ib.id_animal
+            WHERE STR_TO_DATE(ib.fecha, '%d/%m/%Y') = CURDATE()
+            GROUP BY a.id_animal, ib.motivo
+            HAVING intentos >= 2";
+
+            using (var conn = conectar.conex())
+            {
+                using (var cmd = new MySqlCommand(alertaBloqueo, conn))
+                {
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string nombre = reader.GetString(0);
+                            string motivo = reader.GetString(1);
+                            int intentos = reader.GetInt32(2);
+
+                            tablaAlertas.Rows.Add(
+                                $"⚠️ El caballo {nombre} fue bloqueado {intentos} veces hoy. Motivo: {motivo}.",
+                                "⚠️ Medio"
+                            );
+                        }
+                    }
+                }
+            }
+
+            // 4. Consumo menor al 50%
+            string alertaDieta = @"
+            SELECT 
+            a.nombre, 
+            SUM(al.cantidad) AS total, 
+            SUM(dc.cantidad_permitida) AS esperado,
+            ROUND((SUM(al.cantidad) / SUM(dc.cantidad_permitida)) * 100, 1) AS porcentaje
+            FROM animales a
+            JOIN alimentacion al ON al.id_animal = a.id_animal AND STR_TO_DATE(al.fecha, '%d/%m/%Y') = CURDATE()
+            JOIN dieta_comida dc ON a.id_dieta = dc.id_dieta AND al.id_comida = dc.id_comida
+            GROUP BY a.id_animal
+            HAVING porcentaje < 100";
+
+            using (var conn = conectar.conex())
+            {
+                using (var cmd = new MySqlCommand(alertaDieta, conn))
+                {
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string nombre = reader.GetString(0);
+                            double porcentaje = reader.GetDouble(3);
+                            string mensaje;
+                            string gravedad;
+
+                            if (porcentaje >= 75)
+                            {
+                                mensaje = $"🟡 El caballo {nombre} consumió el {porcentaje}% de su dieta hoy.";
+                                gravedad = "🟡 Leve";
+                            }
+                            else if (porcentaje >= 50)
+                            {
+                                mensaje = $"🟠 El caballo {nombre} consumió solo el {porcentaje}% de su dieta hoy.";
+                                gravedad = "🟠 Medio";
+                            }
+                            else
+                            {
+                                mensaje = $"🔴 El caballo {nombre} consumió solo el {porcentaje}% de su dieta hoy.";
+                                gravedad = "🔴 Crítico";
+                            }
+
+                            tablaAlertas.Rows.Add(mensaje, gravedad);
+                        }
+                    }
+                }
+            }
+
+            dataGridView3.DataSource = tablaAlertas;
+            dataGridView3.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridView3.Columns[1].Width = 100;
+        }
+
+        private void IniciarTemporizadorAlertas()
+        {
+            refrescoAlertas = new Timer();
+            refrescoAlertas.Interval = 10000; // 10 segundos
+            refrescoAlertas.Tick += (s, e) => CargarResumenAlertas();
+            refrescoAlertas.Start();
+        }
+
+        
     }
 }
