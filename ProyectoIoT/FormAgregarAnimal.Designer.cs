@@ -42,6 +42,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtRFID = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txtEdad
@@ -76,17 +78,17 @@
             // 
             this.txtNombre.Location = new System.Drawing.Point(136, 106);
             this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(155, 22);
+            this.txtNombre.Size = new System.Drawing.Size(284, 22);
             this.txtNombre.TabIndex = 23;
             this.txtNombre.TextChanged += new System.EventHandler(this.txtNombre_TextChanged);
             // 
             // btnGuardar
             // 
-            this.btnGuardar.BackColor = System.Drawing.Color.DarkKhaki;
+            this.btnGuardar.BackColor = System.Drawing.Color.Olive;
             this.btnGuardar.Font = new System.Drawing.Font("Swis721 BlkCn BT", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGuardar.Location = new System.Drawing.Point(242, 332);
+            this.btnGuardar.Location = new System.Drawing.Point(445, 285);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(109, 30);
+            this.btnGuardar.Size = new System.Drawing.Size(144, 30);
             this.btnGuardar.TabIndex = 22;
             this.btnGuardar.Text = "Agregar   +";
             this.btnGuardar.UseVisualStyleBackColor = false;
@@ -95,20 +97,19 @@
             // cbGenero
             // 
             this.cbGenero.FormattingEnabled = true;
-            this.cbGenero.Items.AddRange(new object[] {
-            "Macho",
-            "Hembra"});
-            this.cbGenero.Location = new System.Drawing.Point(475, 107);
+            this.cbGenero.Location = new System.Drawing.Point(500, 194);
             this.cbGenero.Name = "cbGenero";
             this.cbGenero.Size = new System.Drawing.Size(121, 24);
             this.cbGenero.TabIndex = 21;
+            this.cbGenero.SelectedIndexChanged += new System.EventHandler(this.cbGenero_SelectedIndexChanged);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.BackColor = System.Drawing.Color.Transparent;
             this.label7.Font = new System.Drawing.Font("Swis721 BlkCn BT", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(407, 106);
+            this.label7.Location = new System.Drawing.Point(408, 197);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(62, 21);
             this.label7.TabIndex = 20;
@@ -174,11 +175,31 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Swis721 Blk BT", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(238, 33);
+            this.label1.Location = new System.Drawing.Point(255, 27);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(182, 24);
             this.label1.TabIndex = 14;
             this.label1.Text = "Agregar Animal";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.Transparent;
+            this.label8.Font = new System.Drawing.Font("Swis721 BlkCn BT", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(36, 70);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(43, 20);
+            this.label8.TabIndex = 28;
+            this.label8.Text = "RFID";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
+            // 
+            // txtRFID
+            // 
+            this.txtRFID.Location = new System.Drawing.Point(136, 70);
+            this.txtRFID.Name = "txtRFID";
+            this.txtRFID.Size = new System.Drawing.Size(152, 22);
+            this.txtRFID.TabIndex = 29;
+            this.txtRFID.TextChanged += new System.EventHandler(this.txtRFID_TextChanged);
             // 
             // FormAgregarAnimal
             // 
@@ -186,6 +207,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ProyectoIoT.Properties.Resources.ChatGPT_Image_19_abr_2025__07_35_02_p_m_;
             this.ClientSize = new System.Drawing.Size(648, 469);
+            this.Controls.Add(this.txtRFID);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.txtEdad);
             this.Controls.Add(this.txtRaza);
             this.Controls.Add(this.txtPeso);
@@ -224,5 +247,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txtRFID;
     }
 }

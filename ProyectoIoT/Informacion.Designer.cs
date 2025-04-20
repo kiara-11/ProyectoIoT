@@ -68,7 +68,7 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvAnimales.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvAnimales.GridColor = System.Drawing.Color.DarkSeaGreen;
-            this.dgvAnimales.Location = new System.Drawing.Point(24, 25);
+            this.dgvAnimales.Location = new System.Drawing.Point(12, 12);
             this.dgvAnimales.Name = "dgvAnimales";
             this.dgvAnimales.ReadOnly = true;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -81,7 +81,7 @@
             this.dgvAnimales.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvAnimales.RowHeadersWidth = 51;
             this.dgvAnimales.RowTemplate.Height = 24;
-            this.dgvAnimales.Size = new System.Drawing.Size(924, 378);
+            this.dgvAnimales.Size = new System.Drawing.Size(936, 391);
             this.dgvAnimales.TabIndex = 1;
             this.dgvAnimales.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 

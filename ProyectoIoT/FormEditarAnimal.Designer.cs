@@ -42,6 +42,8 @@
             this.txtPeso = new System.Windows.Forms.TextBox();
             this.txtRaza = new System.Windows.Forms.TextBox();
             this.txtEdad = new System.Windows.Forms.TextBox();
+            this.txtRFID = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -62,7 +64,7 @@
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Swis721 BlkCn BT", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(22, 77);
+            this.label2.Location = new System.Drawing.Point(26, 125);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 21);
             this.label2.TabIndex = 1;
@@ -73,7 +75,7 @@
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Swis721 BlkCn BT", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(22, 122);
+            this.label3.Location = new System.Drawing.Point(12, 166);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(81, 21);
             this.label3.TabIndex = 2;
@@ -84,7 +86,7 @@
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Swis721 BlkCn BT", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(19, 166);
+            this.label4.Location = new System.Drawing.Point(47, 201);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 21);
             this.label4.TabIndex = 3;
@@ -95,7 +97,7 @@
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.Font = new System.Drawing.Font("Swis721 BlkCn BT", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(22, 211);
+            this.label5.Location = new System.Drawing.Point(47, 239);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(46, 21);
             this.label5.TabIndex = 4;
@@ -106,7 +108,7 @@
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Font = new System.Drawing.Font("Swis721 BlkCn BT", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(22, 263);
+            this.label6.Location = new System.Drawing.Point(47, 279);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(42, 20);
             this.label6.TabIndex = 5;
@@ -127,9 +129,6 @@
             // cbGenero
             // 
             this.cbGenero.FormattingEnabled = true;
-            this.cbGenero.Items.AddRange(new object[] {
-            "Macho",
-            "Hembra"});
             this.cbGenero.Location = new System.Drawing.Point(399, 78);
             this.cbGenero.Name = "cbGenero";
             this.cbGenero.Size = new System.Drawing.Size(121, 24);
@@ -137,49 +136,68 @@
             // 
             // btnGuardar
             // 
+            this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.btnGuardar.Font = new System.Drawing.Font("Swis721 BlkCn BT", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGuardar.Location = new System.Drawing.Point(334, 263);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(100, 36);
             this.btnGuardar.TabIndex = 8;
-            this.btnGuardar.Text = "Agregar";
-            this.btnGuardar.UseVisualStyleBackColor = true;
+            this.btnGuardar.Text = "Guardar";
+            this.btnGuardar.UseVisualStyleBackColor = false;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
             // txtNombre
             // 
-            this.txtNombre.Location = new System.Drawing.Point(120, 78);
+            this.txtNombre.Location = new System.Drawing.Point(120, 125);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(188, 22);
             this.txtNombre.TabIndex = 9;
             // 
             // txtDistintivo
             // 
-            this.txtDistintivo.Location = new System.Drawing.Point(120, 123);
+            this.txtDistintivo.Location = new System.Drawing.Point(120, 167);
             this.txtDistintivo.Name = "txtDistintivo";
             this.txtDistintivo.Size = new System.Drawing.Size(188, 22);
             this.txtDistintivo.TabIndex = 10;
             // 
             // txtPeso
             // 
-            this.txtPeso.Location = new System.Drawing.Point(120, 263);
+            this.txtPeso.Location = new System.Drawing.Point(120, 277);
             this.txtPeso.Name = "txtPeso";
             this.txtPeso.Size = new System.Drawing.Size(100, 22);
             this.txtPeso.TabIndex = 11;
             // 
             // txtRaza
             // 
-            this.txtRaza.Location = new System.Drawing.Point(120, 167);
+            this.txtRaza.Location = new System.Drawing.Point(120, 202);
             this.txtRaza.Name = "txtRaza";
             this.txtRaza.Size = new System.Drawing.Size(100, 22);
             this.txtRaza.TabIndex = 12;
             // 
             // txtEdad
             // 
-            this.txtEdad.Location = new System.Drawing.Point(120, 212);
+            this.txtEdad.Location = new System.Drawing.Point(120, 240);
             this.txtEdad.Name = "txtEdad";
             this.txtEdad.Size = new System.Drawing.Size(100, 22);
             this.txtEdad.TabIndex = 13;
+            // 
+            // txtRFID
+            // 
+            this.txtRFID.Location = new System.Drawing.Point(120, 78);
+            this.txtRFID.Name = "txtRFID";
+            this.txtRFID.Size = new System.Drawing.Size(100, 22);
+            this.txtRFID.TabIndex = 14;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.Transparent;
+            this.label8.Font = new System.Drawing.Font("Swis721 BlkCn BT", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(48, 78);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(43, 20);
+            this.label8.TabIndex = 15;
+            this.label8.Text = "RFID";
             // 
             // FormEditarAnimal
             // 
@@ -188,6 +206,8 @@
             this.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.BackgroundImage = global::ProyectoIoT.Properties.Resources.ChatGPT_Image_19_abr_2025__07_35_02_p_m_;
             this.ClientSize = new System.Drawing.Size(539, 405);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.txtRFID);
             this.Controls.Add(this.txtEdad);
             this.Controls.Add(this.txtRaza);
             this.Controls.Add(this.txtPeso);
@@ -204,6 +224,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FormEditarAnimal";
             this.Text = "FormEditarAnimal";
+            this.Load += new System.EventHandler(this.FormEditarAnimal_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -225,5 +246,7 @@
         private System.Windows.Forms.TextBox txtPeso;
         private System.Windows.Forms.TextBox txtRaza;
         private System.Windows.Forms.TextBox txtEdad;
+        private System.Windows.Forms.TextBox txtRFID;
+        private System.Windows.Forms.Label label8;
     }
 }
