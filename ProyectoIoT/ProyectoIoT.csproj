@@ -93,11 +93,23 @@
     <Compile Include="Dieta.Designer.cs">
       <DependentUpon>Dieta.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dispensador.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dispensador.Designer.cs">
+      <DependentUpon>Dispensador.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Historial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial.Designer.cs">
+      <DependentUpon>Historial.cs</DependentUpon>
     </Compile>
     <Compile Include="Informacion.cs">
       <SubType>Form</SubType>
@@ -118,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dieta.resx">
       <DependentUpon>Dieta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dispensador.resx">
+      <DependentUpon>Dispensador.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
