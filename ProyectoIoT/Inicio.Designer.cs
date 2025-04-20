@@ -144,15 +144,9 @@
             this.bt_alertas.IconColor = System.Drawing.SystemColors.Control;
             this.bt_alertas.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.bt_alertas.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-<<<<<<< HEAD
             this.bt_alertas.Location = new System.Drawing.Point(0, 383);
             this.bt_alertas.Name = "bt_alertas";
             this.bt_alertas.Size = new System.Drawing.Size(267, 73);
-=======
-            this.bt_alertas.Location = new System.Drawing.Point(0, 311);
-            this.bt_alertas.Name = "bt_alertas";
-            this.bt_alertas.Size = new System.Drawing.Size(218, 50);
->>>>>>> origin/mauri
             this.bt_alertas.TabIndex = 10;
             this.bt_alertas.Text = "Alertas";
             this.bt_alertas.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -170,15 +164,9 @@
             this.bt_dietas.IconColor = System.Drawing.SystemColors.Control;
             this.bt_dietas.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.bt_dietas.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-<<<<<<< HEAD
             this.bt_dietas.Location = new System.Drawing.Point(3, 302);
             this.bt_dietas.Name = "bt_dietas";
             this.bt_dietas.Size = new System.Drawing.Size(264, 75);
-=======
-            this.bt_dietas.Location = new System.Drawing.Point(0, 255);
-            this.bt_dietas.Name = "bt_dietas";
-            this.bt_dietas.Size = new System.Drawing.Size(218, 50);
->>>>>>> origin/mauri
             this.bt_dietas.TabIndex = 9;
             this.bt_dietas.Text = "Dietas conf.";
             this.bt_dietas.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -196,15 +184,9 @@
             this.bt_animales.IconColor = System.Drawing.SystemColors.Control;
             this.bt_animales.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.bt_animales.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-<<<<<<< HEAD
             this.bt_animales.Location = new System.Drawing.Point(3, 222);
             this.bt_animales.Name = "bt_animales";
             this.bt_animales.Size = new System.Drawing.Size(270, 74);
-=======
-            this.bt_animales.Location = new System.Drawing.Point(0, 199);
-            this.bt_animales.Name = "bt_animales";
-            this.bt_animales.Size = new System.Drawing.Size(218, 50);
->>>>>>> origin/mauri
             this.bt_animales.TabIndex = 8;
             this.bt_animales.Text = "Animales info.";
             this.bt_animales.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -224,11 +206,7 @@
             this.bt_dashboard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.bt_dashboard.Location = new System.Drawing.Point(0, 143);
             this.bt_dashboard.Name = "bt_dashboard";
-<<<<<<< HEAD
             this.bt_dashboard.Size = new System.Drawing.Size(270, 73);
-=======
-            this.bt_dashboard.Size = new System.Drawing.Size(218, 50);
->>>>>>> origin/mauri
             this.bt_dashboard.TabIndex = 0;
             this.bt_dashboard.Text = "Dashboard";
             this.bt_dashboard.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
