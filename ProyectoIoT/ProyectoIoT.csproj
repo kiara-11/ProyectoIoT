@@ -105,7 +105,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-<<<<<<< HEAD
     <Compile Include="FormEditarDieta.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,19 +116,6 @@
     </Compile>
     <Compile Include="Historial.Designer.cs">
       <DependentUpon>Historial.cs</DependentUpon>
-=======
-    <Compile Include="FormAgregarAnimal.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormAgregarAnimal.Designer.cs">
-      <DependentUpon>FormAgregarAnimal.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormEditarAnimal.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormEditarAnimal.Designer.cs">
-      <DependentUpon>FormEditarAnimal.cs</DependentUpon>
->>>>>>> origin/reds
     </Compile>
     <Compile Include="Informacion.cs">
       <SubType>Form</SubType>
@@ -145,16 +131,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<<<<<<< HEAD
     <Compile Include="TarjetaAnimal.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TarjetaAnimal.Designer.cs">
       <DependentUpon>TarjetaAnimal.cs</DependentUpon>
     </Compile>
-=======
-    <Compile Include="Sesion.cs" />
->>>>>>> origin/reds
     <EmbeddedResource Include="Alertas.resx">
       <DependentUpon>Alertas.cs</DependentUpon>
     </EmbeddedResource>
@@ -167,16 +149,8 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-<<<<<<< HEAD
     <EmbeddedResource Include="FormEditarDieta.resx">
       <DependentUpon>FormEditarDieta.cs</DependentUpon>
-=======
-    <EmbeddedResource Include="FormAgregarAnimal.resx">
-      <DependentUpon>FormAgregarAnimal.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormEditarAnimal.resx">
-      <DependentUpon>FormEditarAnimal.cs</DependentUpon>
->>>>>>> origin/reds
     </EmbeddedResource>
     <EmbeddedResource Include="Informacion.resx">
       <DependentUpon>Informacion.cs</DependentUpon>

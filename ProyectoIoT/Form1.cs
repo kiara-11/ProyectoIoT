@@ -115,14 +115,6 @@ namespace ProyectoIoT
             }
         }
 
-<<<<<<< HEAD
-=======
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
->>>>>>> origin/reds
         private void txtuser_TextChanged(object sender, EventArgs e)
         {
 

@@ -316,7 +316,6 @@ namespace ProyectoIoT
             OpenChildForm(new Historial());
         }
 
-<<<<<<< HEAD
         private void iconButton2_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(
@@ -607,16 +606,5 @@ namespace ProyectoIoT
         }
 
         
-=======
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void Inicio_Load(object sender, EventArgs e)
-        {
-
-        }
->>>>>>> origin/reds
     }
 }
