@@ -16,7 +16,9 @@ namespace ProyectoIoT
         public FormAgregarAnimal()
         {
             InitializeComponent();
+            
             cbGenero.Items.AddRange(new string[] { "Macho", "Hembra" });
+
         }
 
         private void txtNombre_TextChanged(object sender, EventArgs e)
@@ -50,6 +52,11 @@ namespace ProyectoIoT
                     MessageBox.Show("Error al guardar: " + ex.Message);
                 }
             }
+
+        }
+
+        private void FormAgregarAnimal_Load(object sender, EventArgs e)
+        {
 
         }
     }

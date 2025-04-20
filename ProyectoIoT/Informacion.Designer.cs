@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.dgvAnimales = new System.Windows.Forms.DataGridView();
             this.btnAgregarAnimal = new System.Windows.Forms.Button();
@@ -46,37 +49,69 @@
             // 
             this.dgvAnimales.AllowUserToAddRows = false;
             this.dgvAnimales.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvAnimales.BackgroundColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAnimales.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvAnimales.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAnimales.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvAnimales.GridColor = System.Drawing.Color.DarkSeaGreen;
             this.dgvAnimales.Location = new System.Drawing.Point(24, 25);
             this.dgvAnimales.Name = "dgvAnimales";
             this.dgvAnimales.ReadOnly = true;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAnimales.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvAnimales.RowHeadersWidth = 51;
             this.dgvAnimales.RowTemplate.Height = 24;
-            this.dgvAnimales.Size = new System.Drawing.Size(797, 492);
+            this.dgvAnimales.Size = new System.Drawing.Size(924, 378);
             this.dgvAnimales.TabIndex = 1;
             this.dgvAnimales.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // btnAgregarAnimal
             // 
-            this.btnAgregarAnimal.Location = new System.Drawing.Point(843, 13);
+            this.btnAgregarAnimal.BackColor = System.Drawing.Color.YellowGreen;
+            this.btnAgregarAnimal.Font = new System.Drawing.Font("Swis721 Blk BT", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAgregarAnimal.ForeColor = System.Drawing.Color.Black;
+            this.btnAgregarAnimal.Location = new System.Drawing.Point(24, 420);
             this.btnAgregarAnimal.Name = "btnAgregarAnimal";
-            this.btnAgregarAnimal.Size = new System.Drawing.Size(75, 23);
+            this.btnAgregarAnimal.Size = new System.Drawing.Size(924, 43);
             this.btnAgregarAnimal.TabIndex = 2;
-            this.btnAgregarAnimal.Text = "Agregar";
-            this.btnAgregarAnimal.UseVisualStyleBackColor = true;
+            this.btnAgregarAnimal.Text = "Agregar +";
+            this.btnAgregarAnimal.UseVisualStyleBackColor = false;
             this.btnAgregarAnimal.Click += new System.EventHandler(this.button1_Click);
             // 
             // Informacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1220, 577);
+            this.BackgroundImage = global::ProyectoIoT.Properties.Resources.ChatGPT_Image_19_abr_2025__07_35_02_p_m_;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(960, 577);
             this.Controls.Add(this.btnAgregarAnimal);
             this.Controls.Add(this.dgvAnimales);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "Informacion";
             this.Text = "Informacion";
+            this.Load += new System.EventHandler(this.Informacion_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAnimales)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
