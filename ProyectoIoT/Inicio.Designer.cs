@@ -54,18 +54,15 @@
             this.iconButton2 = new FontAwesome.Sharp.IconButton();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.iconButton3 = new FontAwesome.Sharp.IconButton();
             this.label10 = new System.Windows.Forms.Label();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
             this.gauge2 = new LiveCharts.Wpf.Gauge();
             this.label7 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.gauge1 = new LiveCharts.Wpf.Gauge();
             this.label4 = new System.Windows.Forms.Label();
@@ -80,9 +77,6 @@
             this.iconButton1 = new FontAwesome.Sharp.IconButton();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.bt_alertas = new FontAwesome.Sharp.IconButton();
-            this.bt_dietas = new FontAwesome.Sharp.IconButton();
-            this.bt_animales = new FontAwesome.Sharp.IconButton();
             this.bt_dashboard = new FontAwesome.Sharp.IconButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelMenu.SuspendLayout();
