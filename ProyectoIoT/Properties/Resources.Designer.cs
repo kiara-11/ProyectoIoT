@@ -63,6 +63,26 @@ namespace ProyectoIoT.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ChatGPT_Image_19_abr_2025__07_35_02_p_m_ {
+            get {
+                object obj = ResourceManager.GetObject("ChatGPT Image 19 abr 2025, 07_35_02 p.m.", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ChatGPT_Image_19_abr_2025__07_35_02_p_m___1_ {
+            get {
+                object obj = ResourceManager.GetObject("ChatGPT Image 19 abr 2025, 07_35_02 p.m. (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Rectangle_29 {
             get {
                 object obj = ResourceManager.GetObject("Rectangle 29", resourceCulture);

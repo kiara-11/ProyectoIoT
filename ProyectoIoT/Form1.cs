@@ -47,13 +47,19 @@ namespace ProyectoIoT
 
                 MySqlDataReader reader = comando.ExecuteReader();
 
-                if (reader.HasRows)
+                if (reader.Read())
                 {
+                    // Guardamos los datos del usuario actual
+                    Sesion.IdUsuario = Convert.ToInt32(reader["id_usuario"]);
+                    Sesion.NombreUsuario = reader["usuario"].ToString();
+
                     reader.Close();
+
+                    // Abrimos el dashboard
                     Inicio formularioInicio = new Inicio();
-                    formularioInicio.FormClosed += (s, args) => this.Show(); 
+                    formularioInicio.FormClosed += (s, args) => this.Show();
                     formularioInicio.Show();
-                    this.Hide(); 
+                    this.Hide();
                 }
                 else
                 {
@@ -109,6 +115,14 @@ namespace ProyectoIoT
             }
         }
 
+<<<<<<< HEAD
+=======
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+>>>>>>> origin/reds
         private void txtuser_TextChanged(object sender, EventArgs e)
         {
 
