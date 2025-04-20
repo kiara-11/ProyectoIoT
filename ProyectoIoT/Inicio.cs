@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using FontAwesome.Sharp;
 using UIDC;
 using MySql.Data.MySqlClient;
+using LiveCharts.Wpf;
 
 namespace ProyectoIoT
 {
@@ -27,6 +28,8 @@ namespace ProyectoIoT
         private Timer refrescoFichaRapida;
         private Timer refrescoAlertas;
         private Timer refrescoContadorAnimales;
+
+        private AngularGauge gaugeComida;
 
         public Inicio()
         {
@@ -60,8 +63,130 @@ namespace ProyectoIoT
                 IniciarTemporizadorAlertas();
                 CargarCantidadAnimales();
                 IniciarTemporizadorCantidadAnimales();
+                InicializarSerial();
+                gaugeComida = (AngularGauge)elementHost2.Child;
             };
         }
+
+        private void InicializarSerial()
+        {
+            serialPort = new SerialPort("COM5", 115200);
+            serialPort.DataReceived += SerialPort_DataReceived;
+            serialPort.Open();
+        }
+
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            string data;
+            lock (serialPort)
+            {
+                data = serialPort.ReadLine();
+            }
+            this.BeginInvoke(new MethodInvoker(() => ProcesarSerial(data)));
+        }
+
+        // Mostrar en DataGridView1 tarjetas activas con nombre de animal
+        private Dictionary<string, string> tarjetasActivas = new Dictionary<string, string>();
+
+        private void ProcesarSerial(string data)
+        {
+            if (data.StartsWith("data:"))
+            {
+                string[] partes = data.Replace("data:", "").Trim().Split(' ');
+                if (partes.Length == 3 && float.TryParse(partes[0], out float porcentaje) && float.TryParse(partes[1], out float consumido) && int.TryParse(partes[2], out int idComida))
+                {
+                    string fecha = DateTime.Now.ToString("dd/MM/yyyy");
+                    string hora = DateTime.Now.ToString("HH:mm");
+
+                    using (var conn = conectar.conex())
+                    {
+                        conn.Open();
+
+                        if (!string.IsNullOrEmpty(tarjetaId))
+                        {
+                            string getAnimal = "SELECT id_animal FROM animales WHERE rfid_tag = @rfid";
+                            using (var cmdAnimal = new MySqlCommand(getAnimal, conn))
+                            {
+                                cmdAnimal.Parameters.AddWithValue("@rfid", tarjetaId);
+                                var result = cmdAnimal.ExecuteScalar();
+                                if (result != null)
+                                {
+                                    int idAnimal = Convert.ToInt32(result);
+                                    string insertAlim = "INSERT INTO alimentacion (id_animal, id_comida, cantidad, fecha, hora) VALUES (@id_animal, @id_comida, @cantidad, @fecha, @hora)";
+                                    using (var cmdInsert = new MySqlCommand(insertAlim, conn))
+                                    {
+                                        cmdInsert.Parameters.AddWithValue("@id_animal", idAnimal);
+                                        cmdInsert.Parameters.AddWithValue("@id_comida", idComida);
+                                        cmdInsert.Parameters.AddWithValue("@cantidad", consumido);
+                                        cmdInsert.Parameters.AddWithValue("@fecha", fecha);
+                                        cmdInsert.Parameters.AddWithValue("@hora", hora);
+                                        cmdInsert.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                        }
+
+                        string updateInv = "UPDATE inventario SET cantidad_actual = @cant, fecha_actualizacion = @fecha WHERE id_comida = @id_comida";
+                        using (var cmdInv = new MySqlCommand(updateInv, conn))
+                        {
+                            cmdInv.Parameters.AddWithValue("@cant", porcentaje);
+                            cmdInv.Parameters.AddWithValue("@fecha", fecha);
+                            cmdInv.Parameters.AddWithValue("@id_comida", idComida);
+                            cmdInv.ExecuteNonQuery();
+                        }
+                    }
+
+                    if (gaugeComida != null)
+                    {
+                        gaugeComida.Value = porcentaje;
+                        gaugeComida.FromValue = 0;
+                        gaugeComida.ToValue = 100;
+                        gaugeComida.TicksStep = 10;
+                    }
+                }
+            }
+            else if (data.StartsWith("rfid:"))
+            {
+                string estado = data.Contains("inactivo") ? "inactivo" : "activo";
+                string tag = data.Replace("rfid:", "").Replace("activo", "").Replace("inactivo", "").Trim();
+
+                if (estado == "activo")
+                {
+                    tarjetaId = tag;
+                    using (var conn = conectar.conex())
+                    {
+                        conn.Open();
+                        string query = "SELECT nombre FROM animales WHERE rfid_tag = @tag";
+                        using (var cmd = new MySqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@tag", tag);
+                            var nombre = cmd.ExecuteScalar()?.ToString();
+                            if (!string.IsNullOrEmpty(nombre))
+                                tarjetasActivas[tag] = nombre;
+                        }
+                    }
+
+                    ActualizarDataGridView1();
+                }
+            }
+        }
+
+        private void ActualizarDataGridView1()
+        {
+            DataTable tabla = new DataTable();
+            tabla.Columns.Add("RFID", typeof(string));
+            tabla.Columns.Add("Nombre", typeof(string));
+
+            foreach (var kvp in tarjetasActivas)
+            {
+                tabla.Rows.Add(kvp.Key, kvp.Value);
+            }
+
+            dataGridView1.DataSource = tabla;
+            dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridView1.Columns[1].Width = 200;
+        }
+
 
         private struct RGBColors
         {
@@ -341,20 +466,16 @@ namespace ProyectoIoT
                 }
             }
 
-            // 2. Inventario crítico
+
             string alertaInventario = @"
-            SELECT 
-            c.nombre, 
-            i.cantidad_actual, 
-            SUM(dc.cantidad_permitida) AS consumo_diario,
-            ROUND(i.cantidad_actual / SUM(dc.cantidad_permitida), 2) AS dias_restantes
-            FROM inventario i
-            JOIN comidas c ON c.id_comida = i.id_comida
-            JOIN dieta_comida dc ON dc.id_comida = i.id_comida
-           JOIN animales a ON a.id_dieta = dc.id_dieta
-           WHERE STR_TO_DATE(i.fecha_actualizacion, '%d/%m/%Y') = CURDATE()
-           GROUP BY i.id_comida
-           HAVING consumo_diario > 0 AND dias_restantes < 1";
+             SELECT 
+             c.nombre, 
+             i.cantidad_actual,
+             ROUND(i.cantidad_actual, 1) AS porcentaje
+             FROM inventario i
+             JOIN comidas c ON c.id_comida = i.id_comida
+             WHERE STR_TO_DATE(i.fecha_actualizacion, '%d/%m/%Y') = CURDATE()
+             AND i.cantidad_actual < 25";
 
             using (var conn = conectar.conex())
             {
@@ -368,15 +489,13 @@ namespace ProyectoIoT
                         while (reader.Read())
                         {
                             string comida = reader.GetString(0);
-                            double dias = reader.GetDouble(3);
+                            double porcentaje = reader.GetDouble(2);
                             string mensaje;
 
-                            if (dias >= 1)
-                                mensaje = $"🔴 Nivel crítico: {comida} alcanza para {Math.Round(dias, 1)} días.";
-                            else if (dias >= 0.25)
-                                mensaje = $"🔴 Atención: {comida} alcanza solo para hoy.";
-                            else if (dias > 0)
-                                mensaje = $"🔴 Alerta: {comida} alcanza solo para unas horas.";
+                            if (porcentaje >= 10)
+                                mensaje = $"🟠 {comida}: Inventario bajo ({porcentaje}%).";
+                            else if (porcentaje > 0)
+                                mensaje = $"🔴 {comida}: Inventario crítico ({porcentaje}%).";
                             else
                                 mensaje = $"🟥 Sin {comida} disponible en inventario.";
 
