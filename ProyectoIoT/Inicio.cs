@@ -293,8 +293,8 @@ namespace ProyectoIoT
 
         private void bt_dietas_Click_1(object sender, EventArgs e)
         {
-            ActivateButton(sender, RGBColors.color1);
-            OpenChildForm(new Dieta());
+            int idAnimalSeleccionado = 1; // Ejemplo
+            OpenChildForm(new Dieta(idAnimalSeleccionado));
         }
 
         private void bt_alertas_Click_1(object sender, EventArgs e)

@@ -138,15 +138,21 @@
             this.bt_alertas.BackColor = System.Drawing.Color.Transparent;
             this.bt_alertas.FlatAppearance.BorderSize = 0;
             this.bt_alertas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bt_alertas.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F);
+            this.bt_alertas.Font = new System.Drawing.Font("Century Gothic", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bt_alertas.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.bt_alertas.IconChar = FontAwesome.Sharp.IconChar.ExclamationTriangle;
             this.bt_alertas.IconColor = System.Drawing.SystemColors.Control;
             this.bt_alertas.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.bt_alertas.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+<<<<<<< HEAD
             this.bt_alertas.Location = new System.Drawing.Point(0, 383);
             this.bt_alertas.Name = "bt_alertas";
             this.bt_alertas.Size = new System.Drawing.Size(267, 73);
+=======
+            this.bt_alertas.Location = new System.Drawing.Point(0, 311);
+            this.bt_alertas.Name = "bt_alertas";
+            this.bt_alertas.Size = new System.Drawing.Size(218, 50);
+>>>>>>> origin/mauri
             this.bt_alertas.TabIndex = 10;
             this.bt_alertas.Text = "Alertas";
             this.bt_alertas.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -158,17 +164,23 @@
             this.bt_dietas.BackColor = System.Drawing.Color.Transparent;
             this.bt_dietas.FlatAppearance.BorderSize = 0;
             this.bt_dietas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bt_dietas.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F);
+            this.bt_dietas.Font = new System.Drawing.Font("Century Gothic", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bt_dietas.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.bt_dietas.IconChar = FontAwesome.Sharp.IconChar.Carrot;
             this.bt_dietas.IconColor = System.Drawing.SystemColors.Control;
             this.bt_dietas.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.bt_dietas.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+<<<<<<< HEAD
             this.bt_dietas.Location = new System.Drawing.Point(3, 302);
             this.bt_dietas.Name = "bt_dietas";
             this.bt_dietas.Size = new System.Drawing.Size(264, 75);
+=======
+            this.bt_dietas.Location = new System.Drawing.Point(0, 255);
+            this.bt_dietas.Name = "bt_dietas";
+            this.bt_dietas.Size = new System.Drawing.Size(218, 50);
+>>>>>>> origin/mauri
             this.bt_dietas.TabIndex = 9;
-            this.bt_dietas.Text = "Diestas conf.";
+            this.bt_dietas.Text = "Dietas conf.";
             this.bt_dietas.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.bt_dietas.UseVisualStyleBackColor = false;
             this.bt_dietas.Click += new System.EventHandler(this.bt_dietas_Click_1);
@@ -178,15 +190,21 @@
             this.bt_animales.BackColor = System.Drawing.Color.Transparent;
             this.bt_animales.FlatAppearance.BorderSize = 0;
             this.bt_animales.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bt_animales.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F);
+            this.bt_animales.Font = new System.Drawing.Font("Century Gothic", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bt_animales.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.bt_animales.IconChar = FontAwesome.Sharp.IconChar.ClipboardList;
             this.bt_animales.IconColor = System.Drawing.SystemColors.Control;
             this.bt_animales.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.bt_animales.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+<<<<<<< HEAD
             this.bt_animales.Location = new System.Drawing.Point(3, 222);
             this.bt_animales.Name = "bt_animales";
             this.bt_animales.Size = new System.Drawing.Size(270, 74);
+=======
+            this.bt_animales.Location = new System.Drawing.Point(0, 199);
+            this.bt_animales.Name = "bt_animales";
+            this.bt_animales.Size = new System.Drawing.Size(218, 50);
+>>>>>>> origin/mauri
             this.bt_animales.TabIndex = 8;
             this.bt_animales.Text = "Animales info.";
             this.bt_animales.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -198,7 +216,7 @@
             this.bt_dashboard.BackColor = System.Drawing.Color.Transparent;
             this.bt_dashboard.FlatAppearance.BorderSize = 0;
             this.bt_dashboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bt_dashboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F);
+            this.bt_dashboard.Font = new System.Drawing.Font("Century Gothic", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bt_dashboard.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.bt_dashboard.IconChar = FontAwesome.Sharp.IconChar.PieChart;
             this.bt_dashboard.IconColor = System.Drawing.SystemColors.Control;
@@ -206,7 +224,11 @@
             this.bt_dashboard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.bt_dashboard.Location = new System.Drawing.Point(0, 143);
             this.bt_dashboard.Name = "bt_dashboard";
+<<<<<<< HEAD
             this.bt_dashboard.Size = new System.Drawing.Size(270, 73);
+=======
+            this.bt_dashboard.Size = new System.Drawing.Size(218, 50);
+>>>>>>> origin/mauri
             this.bt_dashboard.TabIndex = 0;
             this.bt_dashboard.Text = "Dashboard";
             this.bt_dashboard.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -216,21 +238,22 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label2.Location = new System.Drawing.Point(100, 81);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(45, 16);
+            this.label2.Size = new System.Drawing.Size(50, 16);
             this.label2.TabIndex = 7;
             this.label2.Text = "Admin";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label1.Location = new System.Drawing.Point(96, 51);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 20);
+            this.label1.Size = new System.Drawing.Size(118, 19);
             this.label1.TabIndex = 6;
             this.label1.Text = "Aman Admin";
             // 
