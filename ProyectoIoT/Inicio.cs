@@ -63,14 +63,13 @@ namespace ProyectoIoT
                 IniciarTemporizadorAlertas();
                 CargarCantidadAnimales();
                 IniciarTemporizadorCantidadAnimales();
-                InicializarSerial();
-                gaugeComida = (AngularGauge)elementHost2.Child;
+                InicializarSerial();  
             };
         }
 
         private void InicializarSerial()
         {
-            serialPort = new SerialPort("COM5", 115200);
+            serialPort = new SerialPort("COM3", 9600);
             serialPort.DataReceived += SerialPort_DataReceived;
             serialPort.Open();
         }
@@ -100,7 +99,7 @@ namespace ProyectoIoT
 
                     using (var conn = conectar.conex())
                     {
-                        conn.Open();
+                        
 
                         if (!string.IsNullOrEmpty(tarjetaId))
                         {
@@ -155,7 +154,7 @@ namespace ProyectoIoT
                     tarjetaId = tag;
                     using (var conn = conectar.conex())
                     {
-                        conn.Open();
+                        
                         string query = "SELECT nombre FROM animales WHERE rfid_tag = @tag";
                         using (var cmd = new MySqlCommand(query, conn))
                         {
