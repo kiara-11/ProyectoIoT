@@ -64,23 +64,120 @@ namespace ProyectoIoT
                 CargarCantidadAnimales();
                 IniciarTemporizadorCantidadAnimales();
                 InicializarSerial();
-                
+                gaugeComida = (AngularGauge)elementHost2.Child;
             };
         }
 
         private void InicializarSerial()
         {
-            serialPort = new SerialPort("COM5", 115200);
+            serialPort = new SerialPort("COM3", 9600);
             serialPort.DataReceived += SerialPort_DataReceived;
             serialPort.Open();
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            
+            try
+            {
+                string mensaje = serialPort.ReadLine().Trim();
+
+                // --- Caso 1: data: xx
+                if (mensaje.StartsWith("data:"))
+                {
+                    string datosStr = mensaje.Substring(5).Trim();
+                    string[] partes = datosStr.Split(' ');
+
+                    if (partes.Length >= 1)
+                    {
+                        if (int.TryParse(partes[0], out int primerValor))
+                        {
+                            this.Invoke(new MethodInvoker(delegate
+                            {
+                                GuardarEnBaseDeDatos(primerValor);
+                            }));
+                        }
+                    }
+                }
+
+                // --- Caso 2: peso: xx.x rfid: XXXXXXXX
+                else if (mensaje.StartsWith("peso:"))
+                {
+                    string[] partes = mensaje.Split(new[] { "peso:", "rfid:" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (partes.Length == 2)
+                    {
+                        string pesoStr = partes[0].Trim();
+                        string rfidStr = partes[1].Trim();
+
+                        if (float.TryParse(pesoStr, out float peso))
+                        {
+                            this.Invoke(new MethodInvoker(delegate
+                            {
+                                GuardarPesoBDD(peso, rfidStr);
+                            }));
+                        }
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show("Error en la lectura del puerto serial: " + error.Message);
+            }
         }
 
-        
+        private void GuardarPesoBDD(float peso, string rfid)
+        {
+            try
+            {
+                // Paso 1: Buscar id_animal desde la tabla 'animales'
+                string queryBuscar = "SELECT id_animal FROM animales WHERE rfid_tag = @rfid LIMIT 1";
+                MySqlCommand cmdBuscar = new MySqlCommand(queryBuscar, conectar.conex());
+                cmdBuscar.Parameters.AddWithValue("@rfid", rfid);
+
+                object resultado = cmdBuscar.ExecuteScalar();
+
+                if (resultado != null)
+                {
+                    int id_animal = Convert.ToInt32(resultado);
+
+                    // Paso 2: Obtener fecha y hora actual
+                    string fecha = DateTime.Now.ToString("dd/MM/yyyy");
+                    string hora = DateTime.Now.ToString("HH:mm:ss");
+
+                    // Paso 3: Insertar en 'cantidad_consumida'
+                    string queryInsertar = @"INSERT INTO cantidad_consumida (id_animal, cantidac, fecha, hora) 
+                                     VALUES (@id_animal, @peso, @fecha, @hora)";
+                    MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conectar.conex());
+                    cmdInsertar.Parameters.AddWithValue("@id_animal", id_animal);
+                    cmdInsertar.Parameters.AddWithValue("@peso", peso);
+                    cmdInsertar.Parameters.AddWithValue("@fecha", fecha);
+                    cmdInsertar.Parameters.AddWithValue("@hora", hora);
+
+                    cmdInsertar.ExecuteNonQuery();
+                }
+                else
+                {
+                    MessageBox.Show("No se encontró un animal con el RFID: " + rfid);
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Error al guardar peso: " + ex.Message);
+            }
+        }
+        private void GuardarEnBaseDeDatos(int valor)
+        {
+            try
+            {
+                string query = "INSERT INTO inventario (dispensador) VALUES ('" + valor + "')";
+                MySqlCommand comando = new MySqlCommand(query, conectar.conex());
+                comando.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Error al insertar datos: " + ex.Message);
+            }
+        }
 
 
         private struct RGBColors
@@ -270,22 +367,22 @@ namespace ProyectoIoT
             string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd"); // formato estándar para MySQL
 
             string query = @"
-            SELECT 
-            a.nombre AS Caballo,
-            MAX(cc.hora) AS Hora,
-            CONCAT(SUM(cc.cantidadc), ' kg') AS 'Cantidad dispensada',
-            CASE 
-            WHEN d.id_dieta IS NULL THEN '❓ Sin dieta asignada'
-            WHEN SUM(cc.cantidadc) >= (COALESCE(d.alfap,0) + COALESCE(d.alimentobal,0) + COALESCE(d.pelet,0)) THEN '✅ Dieta completada hoy'
-            ELSE '⚠️ Dieta incompleta'
-            END AS Estado
-            FROM animales a
-            LEFT JOIN cantidad_consumida cc ON cc.id_animal = a.id_animal AND cc.fecha = @fechaHoy
-            LEFT JOIN dieta d ON d.id_animal = a.id_animal
-            GROUP BY a.id_animal
-            ORDER BY MAX(cc.hora) DESC
-            LIMIT 4;
-            ";
+           SELECT 
+           a.nombre AS Caballo,
+           MAX(cc.hora) AS Hora,
+           CONCAT(SUM(cc.cantidadc), ' kg') AS 'Cantidad dispensada',
+           CASE 
+           WHEN d.id_dieta IS NULL THEN '❓ Sin dieta asignada'
+           WHEN SUM(cc.cantidadc) >= (COALESCE(d.alfap,0) + COALESCE(d.alimentobal,0) + COALESCE(d.pelet,0)) THEN '✅ Dieta completada hoy'
+           ELSE '⚠️ Dieta incompleta'
+           END AS Estado
+           FROM animales a
+           LEFT JOIN cantidad_consumida cc ON cc.id_animal = a.id_animal AND cc.fecha = @fechaHoy
+           LEFT JOIN dieta d ON d.id_animal = a.id_animal
+           GROUP BY a.id_animal
+           ORDER BY MAX(cc.hora) DESC
+           LIMIT 4;
+           ";
 
             try
             {
@@ -340,11 +437,11 @@ namespace ProyectoIoT
 
             // 1. Animales no alimentados desde ayer
             string alertaNoAlimentado = @"
-            SELECT a.nombre 
-            FROM animales a 
-            LEFT JOIN cantidad_consumida cc ON a.id_animal = cc.id_animal
-            GROUP BY a.id_animal
-            HAVING DATEDIFF(CURDATE(), MAX(STR_TO_DATE(cc.fecha, '%Y-%m-%d'))) >= 1";
+           SELECT a.nombre 
+           FROM animales a 
+           LEFT JOIN cantidad_consumida cc ON a.id_animal = cc.id_animal
+           GROUP BY a.id_animal
+           HAVING DATEDIFF(CURDATE(), MAX(STR_TO_DATE(cc.fecha, '%Y-%m-%d'))) >= 1";
 
             using (var conn = conectar.conex())
             {
@@ -365,15 +462,15 @@ namespace ProyectoIoT
 
             // 2. Intentos bloqueados (2 o más en el día)
             string alertaBloqueo = @"
-            SELECT 
-            a.nombre, 
-            ib.motivo, 
-            COUNT(*) AS intentos
-            FROM intentos_bloqueados ib
-            JOIN animales a ON a.id_animal = ib.id_animal
-            WHERE STR_TO_DATE(ib.fecha, '%Y-%m-%d') = CURDATE()
-            GROUP BY a.id_animal, ib.motivo
-            HAVING intentos >= 2";
+           SELECT 
+           a.nombre, 
+           ib.motivo, 
+           COUNT(*) AS intentos
+           FROM intentos_bloqueados ib
+           JOIN animales a ON a.id_animal = ib.id_animal
+           WHERE STR_TO_DATE(ib.fecha, '%Y-%m-%d') = CURDATE()
+           GROUP BY a.id_animal, ib.motivo
+           HAVING intentos >= 2";
 
             using (var conn = conectar.conex())
             {
@@ -401,16 +498,16 @@ namespace ProyectoIoT
 
             // 3. Dieta incompleta (< 100%)
             string alertaDieta = @"
-            SELECT 
-            a.nombre,
-            SUM(cc.cantidadc) AS total_consumido,
-            COALESCE(SUM(d.alfap + d.alimentobal + d.pelet), 0) AS esperado,
-            ROUND((SUM(cc.cantidadc) / (SUM(d.alfap + d.alimentobal + d.pelet))) * 100, 1) AS porcentaje
-            FROM animales a
-            LEFT JOIN cantidad_consumida cc ON cc.id_animal = a.id_animal AND cc.fecha = @fecha
-            LEFT JOIN dieta d ON d.id_animal = a.id_animal
-            GROUP BY a.id_animal
-            HAVING porcentaje < 100";
+           SELECT 
+           a.nombre,
+           SUM(cc.cantidadc) AS total_consumido,
+           COALESCE(SUM(d.alfap + d.alimentobal + d.pelet), 0) AS esperado,
+           ROUND((SUM(cc.cantidadc) / (SUM(d.alfap + d.alimentobal + d.pelet))) * 100, 1) AS porcentaje
+           FROM animales a
+           LEFT JOIN cantidad_consumida cc ON cc.id_animal = a.id_animal AND cc.fecha = @fecha
+           LEFT JOIN dieta d ON d.id_animal = a.id_animal
+           GROUP BY a.id_animal
+           HAVING porcentaje < 100";
 
             using (var conn = conectar.conex())
             {
@@ -454,11 +551,11 @@ namespace ProyectoIoT
 
             // 4. Inventario crítico
             string alertaInventario = @"
-            SELECT 
-            id, 
-            dispensador
-            FROM inventario
-            WHERE dispensador <= 25";
+           SELECT 
+           id, 
+           dispensador
+           FROM inventario
+           WHERE dispensador <= 25";
 
             using (var conn = conectar.conex())
             {
@@ -528,6 +625,6 @@ namespace ProyectoIoT
             refrescoAlertas.Start();
         }
 
-        
+
     }
 }
