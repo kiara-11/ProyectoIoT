@@ -64,7 +64,7 @@ namespace ProyectoIoT
                 CargarCantidadAnimales();
                 IniciarTemporizadorCantidadAnimales();
                 InicializarSerial();
-                gaugeComida = (AngularGauge)elementHost2.Child;
+                
             };
         }
 
@@ -77,115 +77,10 @@ namespace ProyectoIoT
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            string data;
-            lock (serialPort)
-            {
-                data = serialPort.ReadLine();
-            }
-            this.BeginInvoke(new MethodInvoker(() => ProcesarSerial(data)));
+            
         }
 
-        // Mostrar en DataGridView1 tarjetas activas con nombre de animal
-        private Dictionary<string, string> tarjetasActivas = new Dictionary<string, string>();
-
-        private void ProcesarSerial(string data)
-        {
-            if (data.StartsWith("data:"))
-            {
-                string[] partes = data.Replace("data:", "").Trim().Split(' ');
-                if (partes.Length == 3 && float.TryParse(partes[0], out float porcentaje) && float.TryParse(partes[1], out float consumido) && int.TryParse(partes[2], out int idComida))
-                {
-                    string fecha = DateTime.Now.ToString("dd/MM/yyyy");
-                    string hora = DateTime.Now.ToString("HH:mm");
-
-                    using (var conn = conectar.conex())
-                    {
-                        conn.Open();
-
-                        if (!string.IsNullOrEmpty(tarjetaId))
-                        {
-                            string getAnimal = "SELECT id_animal FROM animales WHERE rfid_tag = @rfid";
-                            using (var cmdAnimal = new MySqlCommand(getAnimal, conn))
-                            {
-                                cmdAnimal.Parameters.AddWithValue("@rfid", tarjetaId);
-                                var result = cmdAnimal.ExecuteScalar();
-                                if (result != null)
-                                {
-                                    int idAnimal = Convert.ToInt32(result);
-                                    string insertAlim = "INSERT INTO alimentacion (id_animal, id_comida, cantidad, fecha, hora) VALUES (@id_animal, @id_comida, @cantidad, @fecha, @hora)";
-                                    using (var cmdInsert = new MySqlCommand(insertAlim, conn))
-                                    {
-                                        cmdInsert.Parameters.AddWithValue("@id_animal", idAnimal);
-                                        cmdInsert.Parameters.AddWithValue("@id_comida", idComida);
-                                        cmdInsert.Parameters.AddWithValue("@cantidad", consumido);
-                                        cmdInsert.Parameters.AddWithValue("@fecha", fecha);
-                                        cmdInsert.Parameters.AddWithValue("@hora", hora);
-                                        cmdInsert.ExecuteNonQuery();
-                                    }
-                                }
-                            }
-                        }
-
-                        string updateInv = "UPDATE inventario SET cantidad_actual = @cant, fecha_actualizacion = @fecha WHERE id_comida = @id_comida";
-                        using (var cmdInv = new MySqlCommand(updateInv, conn))
-                        {
-                            cmdInv.Parameters.AddWithValue("@cant", porcentaje);
-                            cmdInv.Parameters.AddWithValue("@fecha", fecha);
-                            cmdInv.Parameters.AddWithValue("@id_comida", idComida);
-                            cmdInv.ExecuteNonQuery();
-                        }
-                    }
-
-                    if (gaugeComida != null)
-                    {
-                        gaugeComida.Value = porcentaje;
-                        gaugeComida.FromValue = 0;
-                        gaugeComida.ToValue = 100;
-                        gaugeComida.TicksStep = 10;
-                    }
-                }
-            }
-            else if (data.StartsWith("rfid:"))
-            {
-                string estado = data.Contains("inactivo") ? "inactivo" : "activo";
-                string tag = data.Replace("rfid:", "").Replace("activo", "").Replace("inactivo", "").Trim();
-
-                if (estado == "activo")
-                {
-                    tarjetaId = tag;
-                    using (var conn = conectar.conex())
-                    {
-                        conn.Open();
-                        string query = "SELECT nombre FROM animales WHERE rfid_tag = @tag";
-                        using (var cmd = new MySqlCommand(query, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@tag", tag);
-                            var nombre = cmd.ExecuteScalar()?.ToString();
-                            if (!string.IsNullOrEmpty(nombre))
-                                tarjetasActivas[tag] = nombre;
-                        }
-                    }
-
-                    ActualizarDataGridView1();
-                }
-            }
-        }
-
-        private void ActualizarDataGridView1()
-        {
-            DataTable tabla = new DataTable();
-            tabla.Columns.Add("RFID", typeof(string));
-            tabla.Columns.Add("Nombre", typeof(string));
-
-            foreach (var kvp in tarjetasActivas)
-            {
-                tabla.Rows.Add(kvp.Key, kvp.Value);
-            }
-
-            dataGridView1.DataSource = tabla;
-            dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridView1.Columns[1].Width = 200;
-        }
+        
 
 
         private struct RGBColors
@@ -335,8 +230,8 @@ namespace ProyectoIoT
         //Cantidad por fecha dispensada
         private void MonthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
         {
-            string fechaSeleccionada = e.Start.ToString("dd/MM/yyyy");
-            string query = "SELECT cantidad FROM alimentacion WHERE fecha = @fecha";
+            string fechaSeleccionada = e.Start.ToString("yyyy-MM-dd"); // formato compatible con MySQL
+            string query = "SELECT cantidadc FROM cantidad_consumida WHERE fecha = @fecha";
 
             try
             {
@@ -352,7 +247,7 @@ namespace ProyectoIoT
                         int i = 1;
                         foreach (DataRow row in dt.Rows)
                         {
-                            chart1.Series[0].Points.AddXY(i++, row["cantidad"]);
+                            chart1.Series[0].Points.AddXY(i++, row["cantidadc"]);
                         }
                     }
                 }
@@ -372,25 +267,25 @@ namespace ProyectoIoT
         //Ficha de estado de alimentacion por dia y hora
         private void CargarFichaRapida()
         {
-            string fechaHoy = DateTime.Now.ToString("dd/MM/yyyy"); 
+            string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd"); // formato estándar para MySQL
 
             string query = @"
-        SELECT 
+            SELECT 
             a.nombre AS Caballo,
-            al.hora AS Hora,
-            CONCAT(al.cantidad, ' kg') AS 'Cantidad dispensada',
+            MAX(cc.hora) AS Hora,
+            CONCAT(SUM(cc.cantidadc), ' kg') AS 'Cantidad dispensada',
             CASE 
-                WHEN dc.cantidad_permitida IS NULL THEN '❓ Sin dieta asignada'
-                WHEN al.cantidad >= dc.cantidad_permitida THEN '✅ Dieta completada hoy'
-                ELSE '⚠️ Dieta incompleta'
+            WHEN d.id_dieta IS NULL THEN '❓ Sin dieta asignada'
+            WHEN SUM(cc.cantidadc) >= (COALESCE(d.alfap,0) + COALESCE(d.alimentobal,0) + COALESCE(d.pelet,0)) THEN '✅ Dieta completada hoy'
+            ELSE '⚠️ Dieta incompleta'
             END AS Estado
-        FROM alimentacion al
-        JOIN animales a ON al.id_animal = a.id_animal
-        LEFT JOIN dieta_comida dc 
-               ON a.id_dieta = dc.id_dieta AND al.id_comida = dc.id_comida
-        WHERE al.fecha = @fechaHoy
-        ORDER BY al.hora DESC
-        LIMIT 4";
+            FROM animales a
+            LEFT JOIN cantidad_consumida cc ON cc.id_animal = a.id_animal AND cc.fecha = @fechaHoy
+            LEFT JOIN dieta d ON d.id_animal = a.id_animal
+            GROUP BY a.id_animal
+            ORDER BY MAX(cc.hora) DESC
+            LIMIT 4;
+            ";
 
             try
             {
@@ -441,13 +336,15 @@ namespace ProyectoIoT
             tablaAlertas.Columns.Add("Alerta", typeof(string));
             tablaAlertas.Columns.Add("Gravedad", typeof(string));
 
-            // 1. Caballos no alimentados desde ayer
+            string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+
+            // 1. Animales no alimentados desde ayer
             string alertaNoAlimentado = @"
-            SELECT nombre 
-             FROM animales a 
-             LEFT JOIN alimentacion al ON a.id_animal = al.id_animal
-             GROUP BY a.id_animal
-            HAVING DATEDIFF(CURDATE(), MAX(STR_TO_DATE(al.fecha, '%d/%m/%Y'))) >= 1";
+            SELECT a.nombre 
+            FROM animales a 
+            LEFT JOIN cantidad_consumida cc ON a.id_animal = cc.id_animal
+            GROUP BY a.id_animal
+            HAVING DATEDIFF(CURDATE(), MAX(STR_TO_DATE(cc.fecha, '%Y-%m-%d'))) >= 1";
 
             using (var conn = conectar.conex())
             {
@@ -466,46 +363,7 @@ namespace ProyectoIoT
                 }
             }
 
-
-            string alertaInventario = @"
-             SELECT 
-             c.nombre, 
-             i.cantidad_actual,
-             ROUND(i.cantidad_actual, 1) AS porcentaje
-             FROM inventario i
-             JOIN comidas c ON c.id_comida = i.id_comida
-             WHERE STR_TO_DATE(i.fecha_actualizacion, '%d/%m/%Y') = CURDATE()
-             AND i.cantidad_actual < 25";
-
-            using (var conn = conectar.conex())
-            {
-                using (var cmd = new MySqlCommand(alertaInventario, conn))
-                {
-                    if (conn.State != ConnectionState.Open)
-                        conn.Open();
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string comida = reader.GetString(0);
-                            double porcentaje = reader.GetDouble(2);
-                            string mensaje;
-
-                            if (porcentaje >= 10)
-                                mensaje = $"🟠 {comida}: Inventario bajo ({porcentaje}%).";
-                            else if (porcentaje > 0)
-                                mensaje = $"🔴 {comida}: Inventario crítico ({porcentaje}%).";
-                            else
-                                mensaje = $"🟥 Sin {comida} disponible en inventario.";
-
-                            tablaAlertas.Rows.Add(mensaje, "🔴 Crítico");
-                        }
-                    }
-                }
-            }
-
-            // 3. Intentos bloqueados
+            // 2. Intentos bloqueados (2 o más en el día)
             string alertaBloqueo = @"
             SELECT 
             a.nombre, 
@@ -513,7 +371,7 @@ namespace ProyectoIoT
             COUNT(*) AS intentos
             FROM intentos_bloqueados ib
             JOIN animales a ON a.id_animal = ib.id_animal
-            WHERE STR_TO_DATE(ib.fecha, '%d/%m/%Y') = CURDATE()
+            WHERE STR_TO_DATE(ib.fecha, '%Y-%m-%d') = CURDATE()
             GROUP BY a.id_animal, ib.motivo
             HAVING intentos >= 2";
 
@@ -541,16 +399,16 @@ namespace ProyectoIoT
                 }
             }
 
-            // 4. Consumo menor al 50%
+            // 3. Dieta incompleta (< 100%)
             string alertaDieta = @"
             SELECT 
-            a.nombre, 
-            SUM(al.cantidad) AS total, 
-            SUM(dc.cantidad_permitida) AS esperado,
-            ROUND((SUM(al.cantidad) / SUM(dc.cantidad_permitida)) * 100, 1) AS porcentaje
+            a.nombre,
+            SUM(cc.cantidadc) AS total_consumido,
+            COALESCE(SUM(d.alfap + d.alimentobal + d.pelet), 0) AS esperado,
+            ROUND((SUM(cc.cantidadc) / (SUM(d.alfap + d.alimentobal + d.pelet))) * 100, 1) AS porcentaje
             FROM animales a
-            JOIN alimentacion al ON al.id_animal = a.id_animal AND STR_TO_DATE(al.fecha, '%d/%m/%Y') = CURDATE()
-            JOIN dieta_comida dc ON a.id_dieta = dc.id_dieta AND al.id_comida = dc.id_comida
+            LEFT JOIN cantidad_consumida cc ON cc.id_animal = a.id_animal AND cc.fecha = @fecha
+            LEFT JOIN dieta d ON d.id_animal = a.id_animal
             GROUP BY a.id_animal
             HAVING porcentaje < 100";
 
@@ -558,6 +416,8 @@ namespace ProyectoIoT
             {
                 using (var cmd = new MySqlCommand(alertaDieta, conn))
                 {
+                    cmd.Parameters.AddWithValue("@fecha", fechaHoy);
+
                     if (conn.State != ConnectionState.Open)
                         conn.Open();
 
@@ -566,7 +426,7 @@ namespace ProyectoIoT
                         while (reader.Read())
                         {
                             string nombre = reader.GetString(0);
-                            double porcentaje = reader.GetDouble(3);
+                            double porcentaje = reader.IsDBNull(3) ? 0 : reader.GetDouble(3);
                             string mensaje;
                             string gravedad;
 
@@ -592,9 +452,72 @@ namespace ProyectoIoT
                 }
             }
 
+            // 4. Inventario crítico
+            string alertaInventario = @"
+            SELECT 
+            id, 
+            dispensador
+            FROM inventario
+            WHERE dispensador <= 25";
+
+            using (var conn = conectar.conex())
+            {
+                using (var cmd = new MySqlCommand(alertaInventario, conn))
+                {
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int id = reader.GetInt32(0);
+                            double porcentaje = reader.GetDouble(1);
+
+                            string mensaje;
+                            string gravedad;
+
+                            if (porcentaje == 0)
+                            {
+                                mensaje = $"🟥 Comedero #{id} sin alimento disponible.";
+                                gravedad = "🟥 Crítico";
+                            }
+                            else if (porcentaje < 10)
+                            {
+                                mensaje = $"🔴 Comedero #{id} con nivel crítico ({porcentaje}%).";
+                                gravedad = "🔴 Crítico";
+                            }
+                            else
+                            {
+                                mensaje = $"🟠 Comedero #{id} con nivel bajo ({porcentaje}%).";
+                                gravedad = "🟠 Medio";
+                            }
+
+                            tablaAlertas.Rows.Add(mensaje, gravedad);
+                        }
+                    }
+                }
+            }
+
+            // Mostrar las alertas
             dataGridView3.DataSource = tablaAlertas;
             dataGridView3.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridView3.Columns[1].Width = 100;
+
+            // Colorear filas según gravedad
+            foreach (DataGridViewRow row in dataGridView3.Rows)
+            {
+                string gravedad = row.Cells["Gravedad"].Value.ToString();
+
+                if (gravedad.Contains("🟥") || gravedad.Contains("🔴"))
+                    row.DefaultCellStyle.BackColor = Color.MistyRose;
+                else if (gravedad.Contains("🟠"))
+                    row.DefaultCellStyle.BackColor = Color.LemonChiffon;
+                else if (gravedad.Contains("🟡"))
+                    row.DefaultCellStyle.BackColor = Color.Honeydew;
+                else if (gravedad.Contains("⚠️"))
+                    row.DefaultCellStyle.BackColor = Color.LightCyan;
+            }
         }
 
         private void IniciarTemporizadorAlertas()
